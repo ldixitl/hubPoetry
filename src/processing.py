@@ -12,5 +12,11 @@ def filter_by_state(operations: List[Dict], state: str = "EXECUTED") -> List[Dic
 
 def sort_by_date(operations: List[Dict], if_reverse: bool = True) -> List[Dict]:
     """Функция сортирует списки операций по дате и возвращает отсортированный список"""
+    for operation in operations:
+        if "date" not in operation:
+            raise KeyError(f"Отсутствует ключ 'date' в элементе: {operation}")
+        if len(operation["date"]) != 26:
+            raise ValueError(f"Некорректный формат даты: {operation['date']}")
+
     sorted_operations = sorted(operations, key=lambda x: x["date"], reverse=if_reverse)
     return sorted_operations
