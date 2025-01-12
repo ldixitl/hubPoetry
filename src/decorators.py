@@ -5,6 +5,9 @@ from typing import Any, Callable, Optional
 
 
 def logger(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    """Декоратор, который регистрирует выполнение функции, включая время ее начала,
+    окончания, входные аргументы, результат и любые ошибки."""
+
     def decorator(function: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -27,13 +30,21 @@ Function finish: {finish_func}
 The function '{function.__name__}' failed with an error '{type(ex).__name__}: {ex}'
 Inputs - args: {args} and kwargs: {kwargs}
 """
+                if filename:
+                    with open(str(path), "a") as log_file:
+                        log_file.write(log_message)
+                        log_file.write("\n")
+                else:
+                    print(log_message)
+                raise  # Повторно выбрасываем исключение для обработки за пределами декоратора
 
-            if filename:
-                with open(str(path), "a") as log_file:
-                    log_file.write(log_message)
-                    log_file.write("\n")
             else:
-                print(log_message)
+                if filename:
+                    with open(str(path), "a") as log_file:
+                        log_file.write(log_message)
+                        log_file.write("\n")
+                else:
+                    print(log_message)
             return result
 
         return wrapper
