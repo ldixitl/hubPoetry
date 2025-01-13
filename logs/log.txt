@@ -1,0 +1,5 @@
+Function start: Sun Jan 12 21:17:12 2025
+Function 'example_function' called with args: (10, 5) and kwargs: {}.
+Result: 2.0
+Function finish: Sun Jan 12 21:17:13 2025
+

@@ -37,6 +37,11 @@
   Генератор `card_number_generator` принимает начальное и конечное значение диапазона и генерирует номера 
 банковских карт в формате `XXXX XXXX XXXX XXXX`.  
 
+### Реализованные декораторы:
+- **Логгер**  
+  Декоратор `logger` логирует начало и конец выполнения функции, а также ее результат или возникшие ошибки. 
+Он принимает необязательный параметр `filename`, который определяет, куда будут записываться логи (в файл или в консоль). В случае успешного выполнения функции логируются имя функции, входные параметры, результат и время выполнения. В случае ошибки записываются тип ошибки и сообщение об исключении, а также входные параметры.
+
 ## Установка:
 
 1. Клонируйте репозиторий:
@@ -55,7 +60,7 @@ poetry install
 ### Пример работы функций:
 1. Маскировка номера карты:
    ```python
-   from masks import get_mask_card_number
+   from src.masks import get_mask_card_number
 
    card_number = 1234567812345678
    print(get_mask_card_number(card_number))
@@ -64,7 +69,7 @@ poetry install
 
 2. Маскировка номера счета
    ```python
-   from masks import get_mask_account
+   from src.masks import get_mask_account
 
    account_number = 987654321
    print(get_mask_account(account_number))
@@ -73,7 +78,7 @@ poetry install
 
 3. Фильтрация операций:
    ```python
-   from processing import filter_by_state
+   from src.processing import filter_by_state
 
    operations = [
        {"id": 1, "state": "EXECUTED", "date": "2023-12-01"},
@@ -85,7 +90,7 @@ poetry install
 
 4. Сортировка операций:
    ```python
-   from processing import sort_by_date
+   from src.processing import sort_by_date
 
    operations = [
        {"id": 1, "date": "2023-12-01", "amount": 100},
@@ -100,7 +105,7 @@ poetry install
 
 1. **Фильтрация транзакций по валюте**  
    ```python
-   from generators import filter_by_currency
+   from src.generators import filter_by_currency
 
    transactions = [
        {
@@ -128,7 +133,7 @@ poetry install
 
 2. **Описание транзакций**  
    ```python
-   from generators import transaction_descriptions
+   from src.generators import transaction_descriptions
 
    transactions = [
        {"id": 1, "description": "Payment"},
@@ -145,7 +150,7 @@ poetry install
 
 3. **Генерация номеров банковских карт**  
    ```python
-   from generators import card_number_generator
+   from src.generators import card_number_generator
 
    for card in card_number_generator(1, 3):
        print(card)
@@ -154,7 +159,31 @@ poetry install
    # 0000 0000 0000 0002
    # 0000 0000 0000 0003
    ```
-   
+
+### Пример работы декораторов:
+
+  ```python
+  from src.decorators import logger
+  @logger(filename="my_log.txt")
+  def add(x, y):
+      return x + y
+  ```
+
+  В случае успешного выполнения:
+  ```
+  Function start: Sun Jan 12 21:50:12 2025
+  Function 'add' called with args: (1, 2) and kwargs: {}.
+  Result: 3
+  Function finish: Sun Jan 12 21:50:12 2025
+  ```
+
+  В случае ошибки:
+  ```
+  Function start: Sun Jan 12 21:50:12 2025
+  The function 'add' failed with an error 'ZeroDivisionError: division by zero'
+  Inputs - args: (1, 0) and kwargs: {}
+  ```
+
 ## Тестирование
 
 Для тестирования в проекте используются **pytest** и плагин **pytest-cov** для измерения покрытия кода тестами.
