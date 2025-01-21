@@ -26,6 +26,14 @@
 - **Сортировка по дате**  
   Функция принимает список словарей и необязательный параметр, задающий порядок сортировки (по умолчанию — убывание). 
 Возвращается новый список, отсортированный по ключу `date`.
+- **Загрузка транзакций из файла**  
+  Функция `load_transactions` принимает путь до JSON-файла и возвращает список словарей с данными о финансовых
+транзакциях.
+- **Конвертация суммы транзакции в рубли**  
+  Функция `currency_exchanger` принимает транзакцию (словарь) и возвращает сумму транзакции в рублях 
+(тип данных — `float`).  
+Для работы функции `currency_exchanger` необходимо указать API-ключ в файле `.env` по инструкции из
+[**.env.sample**](.env.sample).
 
 ### Реализованные генераторы:
 - **Фильтрация транзакций по валюте**  
@@ -58,7 +66,7 @@ poetry install
 
 ## Использование:
 ### Пример работы функций:
-1. Маскировка номера карты:
+1. **Маскировка номера карты**
    ```python
    from src.masks import get_mask_card_number
 
@@ -67,7 +75,7 @@ poetry install
    # Вывод: 1234 56** **** 5678
    ```
 
-2. Маскировка номера счета
+2. **Маскировка номера счета**
    ```python
    from src.masks import get_mask_account
 
@@ -76,7 +84,7 @@ poetry install
    # Вывод: **4321
    ```
 
-3. Фильтрация операций:
+3. **Фильтрация операций**
    ```python
    from src.processing import filter_by_state
 
@@ -88,7 +96,7 @@ poetry install
    # Вывод: [{'id': 2, 'state': 'CANCELED', 'date': '2023-11-01'}]
    ```
 
-4. Сортировка операций:
+4. **Сортировка операций**
    ```python
    from src.processing import sort_by_date
 
@@ -100,6 +108,31 @@ poetry install
    # Вывод: [{'id': 2, 'date': '2023-11-01', 'amount': 200},
    #          {'id': 1, 'date': '2023-12-01', 'amount': 100}]
    ```
+   
+5. **Загрузка транзакций из файла**
+```python
+from src.utils import load_transactions
+
+file_path = "data/operations.json"
+transactions = load_transactions(file_path)
+print(transactions)
+# Вывод: [{'id': 1, 'amount': '500.00', 'currency': {'code': 'USD'}}, ...]
+```
+
+6. **Конвертация суммы транзакции в рубли**
+```python
+from src.external_api import currency_exchanger
+
+transaction = {
+    "operationAmount": {
+        "amount": "100.00",
+        "currency": {"code": "USD"}
+    }
+}
+converted_amount = currency_exchanger(transaction)
+print(converted_amount)
+# Вывод: 7545.00 (в зависимости от курса валют)
+```
 
 ### Пример работы генераторов:
 
@@ -161,7 +194,7 @@ poetry install
    ```
 
 ### Пример работы декораторов:
-
+  1. **Логгер**
   ```python
   from src.decorators import logger
   @logger(filename="my_log.txt")
