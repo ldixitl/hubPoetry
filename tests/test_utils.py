@@ -38,3 +38,12 @@ def test_file_contains_not_a_list(mock_file) -> None:
     result = load_transactions(file_path)
     assert result == []
     mock_file.assert_called_once_with(file_path, "r", encoding="UTF-8")
+
+
+@patch("builtins.open", new_callable=mock_open, read_data="invalid json")
+def test_invalid_json(mock_file) -> None:
+    """Тест для файла с некорректным JSON"""
+    file_path = "data/corrupt.json"
+    result = load_transactions(file_path)
+    assert result == []
+    mock_file.assert_called_once_with(file_path, "r", encoding="UTF-8")
