@@ -60,7 +60,7 @@ def test_parse_transactions_auto_file_not_found() -> None:
         assert transactions == []
 
 
-@patch("pandas.read_excel")
+@patch("pandas.read_excel", side_effect=pd.errors.EmptyDataError)
 def test_parse_transactions_auto_empty_file(mock_read_excel) -> None:
     """Тестирование ошибки при пустом файле"""
     df_mock = pd.DataFrame()
