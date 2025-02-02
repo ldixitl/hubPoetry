@@ -34,6 +34,9 @@
 (тип данных — `float`).  
 Для работы функции `currency_exchanger` необходимо указать API-ключ в файле `.env` по инструкции из
 [**.env.sample**](.env.sample).
+- **Считывание транзакций из CSV и XLSX**  
+  Функция `parse_transactions_auto` принимает путь к файлу (CSV или XLSX) и возвращает список словарей с финансовыми операциями.
+Данные автоматически разбираются и приводятся к единому формату, а неподдерживаемые файлы игнорируются.
 
 ### Реализованные генераторы:
 - **Фильтрация транзакций по валюте**  
@@ -63,6 +66,7 @@ git clone https://github.com/ldixitl/bankOperationHub.git
 ```
 poetry install
 ```
+3. Создайте файл переменных окружения `.env` - [**шаблон такого файла**](.env.sample).
 
 ## Использование:
 ### Пример работы функций:
@@ -110,32 +114,49 @@ poetry install
    ```
    
 5. **Загрузка транзакций из файла**
-```python
-from src.utils import load_transactions
-
-file_path = "data/operations.json"
-transactions = load_transactions(file_path)
-print(transactions)
-# Вывод: [{'id': 1, 'amount': '500.00', 'currency': {'code': 'USD'}}, ...]
-```
+    ```python
+    from src.utils import load_transactions
+    
+    file_path = "data/operations.json"
+    transactions = load_transactions(file_path)
+    print(transactions)
+    # Вывод: [{'id': 1, 'amount': '500.00', 'currency': {'code': 'USD'}}, ...]
+    ```
 
 6. **Конвертация суммы транзакции в рубли**
-```python
-from src.external_api import currency_exchanger
-
-transaction = {
-    "operationAmount": {
-        "amount": "100.00",
-        "currency": {"code": "USD"}
+    ```python
+    from src.external_api import currency_exchanger
+    
+    transaction = {
+        "operationAmount": {
+            "amount": "100.00",
+            "currency": {"code": "USD"}
+        }
     }
-}
-converted_amount = currency_exchanger(transaction)
-print(converted_amount)
-# Вывод: 7545.00 (в зависимости от курса валют)
-```
+    converted_amount = currency_exchanger(transaction)
+    print(converted_amount)
+    # Вывод: 7545.00 (в зависимости от курса валют)
+    ```
+
+7. **Считывание транзакций из CSV и XLSX**
+    ```python
+    from src.transaction_parser import parse_transaction_auto
+    
+    file_path_csv = "data/transactions.csv"
+    transactions_csv = parse_transaction_auto(file_path_csv)
+    print(transactions_csv)
+    # Вывод: [{'id': 650703, 'state': 'EXECUTED', 'date': '2023-09-05T11:30:32Z', 
+    #          'amount': 16210, 'currency_name': 'Sol', 'currency_code': 'PEN',
+    #          'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397', 
+    #          'description': 'Перевод организации'}, ...]
+    
+    file_path_xlsx = "data/transactions_excel.xlsx"
+    transactions_xlsx = parse_transaction_auto(file_path_xlsx)
+    print(transactions_xlsx)
+    # Вывод аналогичен CSV-версии
+    ```
 
 ### Пример работы генераторов:
-
 1. **Фильтрация транзакций по валюте**  
    ```python
    from src.generators import filter_by_currency
@@ -194,7 +215,7 @@ print(converted_amount)
    ```
 
 ### Пример работы декораторов:
-  1. **Логгер**
+1. **Логгер**
   ```python
   from src.decorators import logger
   @logger(filename="my_log.txt")
