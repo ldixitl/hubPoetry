@@ -3,6 +3,7 @@ from typing import Dict, List
 
 import pandas as pd
 
+# Настройка логирования
 logger = logging.getLogger("parser")
 logger.setLevel(logging.DEBUG)
 file_handler = logging.FileHandler("logs/transaction_parser.log", mode="w", encoding="UTF-8")

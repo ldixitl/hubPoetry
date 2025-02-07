@@ -2,8 +2,7 @@ import logging
 
 from dateutil import parser
 
-# from src import masks
-import masks
+from src import masks
 
 # Настройка логирования
 logger = logging.getLogger("widget")
