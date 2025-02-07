@@ -5,12 +5,12 @@ def filter_by_currency(transaction_list: List[Dict], currency_type: str) -> Gene
     """Функция фильтрует принимаемые транзакции по заданной валюте
     и возвращает итератор по отфильтрованным транзакциям"""
     if isinstance(transaction_list, list):
-        try:
-            for transaction in transaction_list:
-                if transaction["operationAmount"]["currency"]["code"] == currency_type.upper():
-                    yield transaction
-        except KeyError as e:
-            raise KeyError(f"Некорректные данные в транзакции: {transaction}. Ошибка: {e}")
+        for transaction in transaction_list:
+            if (
+                transaction.get("operationAmount", {}).get("currency", {}).get("code") == currency_type.upper()
+                or transaction.get("currency_code") == currency_type.upper()
+            ):
+                yield transaction
     else:
         raise TypeError("Некорректный тип данных.")
 
