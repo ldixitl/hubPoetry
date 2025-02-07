@@ -59,9 +59,9 @@ def test_get_date_cases(midnight_time: str, end_day_time: str) -> None:
     "input_date,expected_exception",
     [
         # Проверка некорректных входных данных
-        ("2024-03-11", ValueError),  # Отсутствует время
+        ("2024-25-11", ValueError),  # Не соответствует ISO-8601 формату
         ("", ValueError),  # Пустая строка
-        ("11.03.2024", ValueError),  # Неверный формат
+        ("11.03.2024", ValueError),  # Не соответствует ISO-8601 формату
         (None, TypeError),  # Некорректный тип
         (123456, TypeError),  # Некорректный тип
     ],
