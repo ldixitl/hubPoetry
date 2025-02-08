@@ -1,15 +1,12 @@
 import logging
-import os
 from typing import Dict, List
 
 import pandas as pd
 
-log_dir = "../logs"
-os.makedirs(log_dir, exist_ok=True)
-
+# Настройка логирования
 logger = logging.getLogger("parser")
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler("../logs/transaction_parser.log", mode="w", encoding="UTF-8")
+file_handler = logging.FileHandler("logs/transaction_parser.log", mode="w", encoding="UTF-8")
 file_formater = logging.Formatter(
     "%(asctime)s - %(filename)s - %(levelname)s: %(message)s", datefmt="%d-%m-%Y %H:%M:%S"
 )

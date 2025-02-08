@@ -1,13 +1,10 @@
 import json
 import logging
-import os
 
-log_dir = "../logs"
-os.makedirs(log_dir, exist_ok=True)
-
+# Настройка логирования
 logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler("../logs/utils.log", mode="w", encoding="UTF-8")
+file_handler = logging.FileHandler("logs/utils.log", mode="w", encoding="UTF-8")
 file_formater = logging.Formatter(
     "%(asctime)s - %(filename)s - %(levelname)s: %(message)s", datefmt="%d-%m-%Y %H:%M:%S"
 )

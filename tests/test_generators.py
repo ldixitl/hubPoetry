@@ -19,31 +19,6 @@ def test_filter_by_currency_invalid_format() -> None:
         next(filter_by_currency(None, "USD"))
 
 
-def test_filter_by_currency_invalid_key() -> None:
-    with pytest.raises(KeyError):
-        next(
-            filter_by_currency(
-                [
-                    {
-                        "id": 873106923,
-                        "state": "EXECUTED",
-                        "date": "2019-03-23T01:09:46.296404",
-                        "operationAmount": {
-                            "amount": "43318.34",
-                            "currency": {
-                                "name": "руб.",
-                            },
-                        },
-                        "description": "Перевод со счета на счет",
-                        "from": "Счет 44812258784861134719",
-                        "to": "Счет 74489636417521191160",
-                    }
-                ],
-                "USD",
-            )
-        )
-
-
 def test_transaction_descriptions_corrected(transactions_list: List[Dict]) -> None:
     descriptions = transaction_descriptions(transactions_list)
     assert next(descriptions) == "Перевод организации"

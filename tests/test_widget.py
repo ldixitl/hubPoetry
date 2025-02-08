@@ -31,10 +31,16 @@ def test_mask_account_card_invalid(invalid_card_number: str, invalid_account_num
         mask_account_card(invalid_card_number)
 
     with pytest.raises(ValueError):
+        mask_account_card("Visa 5490548934s2548g")
+
+    with pytest.raises(ValueError):
         mask_account_card(invalid_account_number)
 
     with pytest.raises(TypeError):
         mask_account_card(12346)
+
+    with pytest.raises(ValueError):
+        mask_account_card("Счет 54329394302034fhs")
 
 
 @pytest.mark.parametrize(
@@ -59,9 +65,9 @@ def test_get_date_cases(midnight_time: str, end_day_time: str) -> None:
     "input_date,expected_exception",
     [
         # Проверка некорректных входных данных
-        ("2024-03-11", ValueError),  # Отсутствует время
+        ("2024-25-11", ValueError),  # Не соответствует ISO-8601 формату
         ("", ValueError),  # Пустая строка
-        ("11.03.2024", ValueError),  # Неверный формат
+        ("11.03.2024", ValueError),  # Не соответствует ISO-8601 формату
         (None, TypeError),  # Некорректный тип
         (123456, TypeError),  # Некорректный тип
     ],

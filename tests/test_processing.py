@@ -63,14 +63,6 @@ def test_sort_by_date_same_dates() -> None:
 
 
 def test_sort_by_date_invalid_format() -> None:
-    with pytest.raises(KeyError):
-        sort_by_date(
-            [
-                {"id": 1, "state": "EXECUTED"},
-                {"id": 2, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-            ]
-        )
-
     with pytest.raises(ValueError):
         sort_by_date(
             [

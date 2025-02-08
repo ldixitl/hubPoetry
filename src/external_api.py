@@ -3,9 +3,10 @@ import os
 import requests
 from dotenv import load_dotenv
 
+# Загрузка переменных окружения
 load_dotenv()
 API_KEY_EXCHANGER = os.getenv("API_KEY_EXCHANGER")
-URL_EXCHANGER = "https://api.apilayer.com/exchangerates_data/convert"
+URL_EXCHANGER = os.getenv("URL_EXCHANGER")
 
 
 def currency_exchanger(transaction: dict) -> float:
